@@ -50,5 +50,5 @@ Route::put('user/{id}', [UserController::class, 'update']);
 Route::delete('user/{id}', [UserController::class, 'destroy']);
 
 Route::get('currencies', [CurrencyController::class, 'index']);
-
-Route::post('sell', [TransactionController::class, 'TransactionSell']);
+Route::post('rate', [TransactionController::class, 'getRate']);
+Route::post('exchange', [TransactionController::class, 'exchange']);
