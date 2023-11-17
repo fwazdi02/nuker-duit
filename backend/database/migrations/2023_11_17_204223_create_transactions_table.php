@@ -15,13 +15,15 @@ class CreateTransactionsTable extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->char('currency', 3);
+            $table->unsignedBigInteger('currency_id');
             $table->enum('type', array('buy', 'sell'));
             $table->decimal('amount', 5, 2)->unsigned();
-            $table->decimal('rate', 10, 2)->unsigned();
-            $table->decimal('idr_amount', 10, 2)->unsigned();
+            $table->double('rate', 12, 10)->unsigned();
+            $table->double('idr_amount', 12, 2)->unsigned();
             $table->unsignedBigInteger('created_by');
             $table->timestamps();
+
+            $table->foreign('currency_id')->references('id')->on('currencies');
             $table->foreign('created_by')->references('id')->on('users');
         });
     }
