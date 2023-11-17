@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use App\Currency;
+use Illuminate\Support\Facades\DB;
 class CurrencySeeder extends Seeder
 {
     /**
@@ -12,17 +12,23 @@ class CurrencySeeder extends Seeder
     public function run()
     {
         $currencies = [
-            ['code' => 'usd', 'name' => 'US Dollar'],
-            ['code' => 'eur', 'name' => 'Euro'],
-            ['code' => 'gbp', 'name' => 'Pound Sterling'],
-            ['code' => 'jpy', 'name' => 'Japan Yen'],
-            ['code' => 'aud', 'name' => 'Australian Dollar'],
-            ['code' => 'hkd', 'name' => 'Hong Kong Dollar'],
-            ['code' => 'sgd', 'name' => 'Singapore Dollar'],
-            ['code' => 'thb', 'name' => 'Thai Baht'],
-            ['code' => 'inr', 'name' => 'Indian Rupee'],
-            ['code' => 'myr', 'name' => 'Malaysian Ringgit'],
+            ['usd', 'US Dollar'],
+            ['eur', 'Euro'],
+            ['gbp', 'Pound Sterling'],
+            ['jpy', 'Japan Yen'],
+            ['aud', 'Australian Dollar'],
+            ['hkd', 'Hong Kong Dollar'],
+            ['sgd', 'Singapore Dollar'],
+            ['thb', 'Thai Baht'],
+            ['inr', 'Indian Rupee'],
+            ['myr', 'Malaysian Ringgit'],
         ];
-        Currency::insert($currencies);
+        
+        foreach ($currencies as $currency) {
+            DB::insert('insert into currencies (code, name) values (?, ?)', [
+                $currency[0],
+                $currency[1],
+            ]);
+        }
     }
 }
