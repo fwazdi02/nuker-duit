@@ -3,9 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\BookController;
-use App\Http\Controllers\BookCategoryController;
-use App\Http\Controllers\BookBorrowController;
+use App\Http\Controllers\CurrencyController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -36,10 +34,10 @@ Route::post('auth/login', function (Request $request) {
         ];
         return response()->json(['success'=> true, 'data' => $response], 200);
     }
-    return response()->json(['error' => 'Unauthorized'], 401);
+return response()->json(['error' => 'Wrong email or password, please try again'], 401);
 });
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
+Route::middleware('auth:api')->get('user', function (Request $request) {
     return $request->user();
 });
 
@@ -50,3 +48,4 @@ Route::get('user/{id}', [UserController::class, 'show']);
 Route::put('user/{id}', [UserController::class, 'update']);
 Route::delete('user/{id}', [UserController::class, 'destroy']);
 
+Route::get('currencies', [CurrencyController::class, 'index']);
