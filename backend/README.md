@@ -22,6 +22,12 @@ php artisan migrate
 php artisan db:seed
 
 
+### Passport Install
+
+php artisan passport:install
+
+
+
 
 ### Create New User
 you can create new user via : http://localhost:8000/register

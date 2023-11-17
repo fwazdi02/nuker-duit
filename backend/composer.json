@@ -1,6 +1,6 @@
 {
     "name": "laravel/laravel",
-    "type": "project",
+    "type": "nukerduit-backend",
     "description": "The Laravel Framework.",
     "keywords": [
         "framework",
