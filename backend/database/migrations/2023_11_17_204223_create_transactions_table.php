@@ -17,9 +17,9 @@ class CreateTransactionsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('currency_id');
             $table->enum('type', array('buy', 'sell'));
-            $table->decimal('amount', 5, 2)->unsigned();
-            $table->double('rate', 12, 10)->unsigned();
-            $table->double('idr_amount', 12, 2)->unsigned();
+            $table->double('amount')->unsigned();
+            $table->double('rate')->unsigned();
+            $table->double('amount_result')->unsigned();
             $table->unsignedBigInteger('created_by');
             $table->timestamps();
 

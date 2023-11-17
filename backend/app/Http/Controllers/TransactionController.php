@@ -48,6 +48,7 @@ class TransactionController extends Controller
             ];
             return response()->json($response, 400);
         }
+        
 
         $data = MoneyChanger::getExchangeRate($code, $transaction_type);
         if($data['success'] === true){
@@ -59,6 +60,13 @@ class TransactionController extends Controller
             }else{
                 $message = "You have successfully exchanged $amount (idr) to $result ($code)";
             }
+
+            // save transanction to db
+            $currency = DB::select('select id from currencies where code = ?', [$code])[0];
+            $user_id = $request->user()->id;
+            DB::insert('insert into transactions (currency_id, type, amount, rate, amount_result, created_by) values (?, ?, ?, ?, ?, ?)', 
+            [$currency->id, $transaction_type, $amount, $rate, $result, $user_id]);
+
             return response()->json([
                 'success' => true, 
                 'message' => $message,

@@ -38,17 +38,16 @@ Route::post('auth/login', function (Request $request) {
 return response()->json(['error' => 'Wrong email or password, please try again'], 401);
 });
 
-Route::middleware('auth:api')->get('user', function (Request $request) {
-    return $request->user();
+Route::middleware('auth:api')->group(function () {
+    Route::get('users', [UserController::class, 'index']);
+    Route::post('user', [UserController::class, 'store']);
+    Route::get('user/{id}', [UserController::class, 'show']);
+    Route::put('user/{id}', [UserController::class, 'update']);
+    Route::delete('user/{id}', [UserController::class, 'destroy']);
+    
+    Route::get('currencies', [CurrencyController::class, 'index']);
+    Route::post('rate', [TransactionController::class, 'getRate']);
+    Route::post('exchange', [TransactionController::class, 'exchange']);
 });
 
 
-Route::get('users', [UserController::class, 'index']);
-Route::post('user', [UserController::class, 'store']);
-Route::get('user/{id}', [UserController::class, 'show']);
-Route::put('user/{id}', [UserController::class, 'update']);
-Route::delete('user/{id}', [UserController::class, 'destroy']);
-
-Route::get('currencies', [CurrencyController::class, 'index']);
-Route::post('rate', [TransactionController::class, 'getRate']);
-Route::post('exchange', [TransactionController::class, 'exchange']);
