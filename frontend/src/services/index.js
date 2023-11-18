@@ -11,6 +11,17 @@ const authLogin = async (payload) => {
   }
 }
 
+const getRecentTransaction = async () => {
+  try {
+    const response = await http.get('/recent-transaction')
+    return response
+  } catch (error) {
+    const message = error.response?.data?.message || error.message
+    console.log(message)
+    window.$message.error(message)
+  }
+}
+
 const getCurrencies = async () => {
   try {
     const response = await http.get('/currencies')
@@ -44,4 +55,4 @@ const submitExchange = async (payload) => {
 }
 
 
-export { authLogin, getCurrencies, getExchangeRate, submitExchange }
+export { authLogin, getCurrencies, getExchangeRate, getRecentTransaction, submitExchange }

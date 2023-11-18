@@ -79,7 +79,7 @@ const menuOptions = [
         <div class="flex items-center justify-between h-full px-4 text-green-600">
           <p class="text-xl font-bold my-0">NukerDuit!</p>
           <div class="flex items-center gap-4">
-            Admin
+            {{  authStore?.user?.name || '-' }} 
             <n-avatar
               round
               size="medium"
