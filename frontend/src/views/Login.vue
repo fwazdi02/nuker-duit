@@ -54,7 +54,6 @@ const rules = {
                 :loading="isLoading"
                 :disabled="!model.email && !model.password"
                 type="primary"
-                icon-placement="right"
               >
                 Login
               </n-button>
