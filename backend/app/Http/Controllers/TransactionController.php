@@ -21,7 +21,7 @@ class TransactionController extends Controller
         if ($validator->fails()) {
             $response = [
                 'success' => false,
-                'message' => $validator->errors(),
+                'message' => implode(",", $validator->messages()->all()),
             ];
             return response()->json($response, 400);
         }
@@ -44,7 +44,7 @@ class TransactionController extends Controller
         if ($validator->fails()) {
             $response = [
                 'success' => false,
-                'message' => $validator->errors(),
+                'message' => implode(",", $validator->messages()->all()),
             ];
             return response()->json($response, 400);
         }
