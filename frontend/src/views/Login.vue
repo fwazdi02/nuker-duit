@@ -1,10 +1,17 @@
 <script setup>
 import { authLogin } from '@/services'
+import { useAuthStore } from '@/stores/authStore'
 import { useMessage } from 'naive-ui'
+import { useRouter } from 'vue-router'
+import { ref } from 'vue'
 window.$message = useMessage()
 
-import { ref } from 'vue'
+
+
+const router = useRouter()
 const isLoading = ref(false)
+const authStore = useAuthStore()
+
 const model = ref({
   email: null,
   password: null
@@ -40,16 +47,18 @@ const rules = {
   ]
 }
 
-const handleSubmit = () => {
+const handleSubmit = async () => {
   isLoading.value = true
-  const response = authLogin(model.value)
-  if (response.data?.success) {
-    const user = response.data.data
+  const response = await authLogin(model.value)
+  if (response.data) {
+    const { user, access_token }= response.data.data
+    authStore.setAuth({ user, token: access_token })
     window.$message.success(`Welcome back, ${user?.name}`)
+    router.push({ name: 'dashboard' })
   }
   setTimeout(() => {
     isLoading.value = false
-  }, 300);
+  }, 1000);
 }
 </script>
 
