@@ -38,7 +38,7 @@ const rules = {
   <div class="">
     <div class="h-screen flex flex-col items-center justify-center px-4">
       <n-card class="w-full md:w-1/3 lg:1/4 xl:w-3/12 mx-auto">
-        <p class="text-2xl font-bold mt-0 mb-1">NukerDuit!</p>
+        <p class="text-2xl font-bold mt-0 mb-1 text-green-600">NukerDuit!</p>
         <p class="text-lg text-slate-400 mt-0">Please, enter your account</p>
         <n-form ref="formRef" :model="model" :rules="rules">
           <n-form-item path="email" label="Email">

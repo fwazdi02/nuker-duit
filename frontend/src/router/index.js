@@ -23,6 +23,30 @@ const router = createRouter({
             requiresAuth: true
           },
           component: () => import('../views/Dashboard.vue')
+        },
+        {
+          path: 'buy',
+          name: 'buy',
+          meta: {
+            requiresAuth: true
+          },
+          component: () => import('../views/TransactionBuy.vue')
+        },
+        {
+          path: 'sell',
+          name: 'sell',
+          meta: {
+            requiresAuth: true
+          },
+          component: () => import('../views/TransactionSell.vue')
+        },
+        {
+          path: 'summary',
+          name: 'summary',
+          meta: {
+            requiresAuth: true
+          },
+          component: () => import('../views/Summary.vue')
         }
       ]
     }

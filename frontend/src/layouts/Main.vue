@@ -1,5 +1,6 @@
 <script setup>
 const inverted = ref(false)
+import { useRoute, RouterLink } from 'vue-router'
 import { h, ref } from 'vue'
 import { NIcon } from 'naive-ui'
 import {
@@ -9,28 +10,35 @@ import {
   UploadOutlined
 } from '@vicons/material'
 
+const route = useRoute()
+const activeKey = ref(route.name)
+
 function renderIcon(icon) {
   return () => h(NIcon, null, { default: () => h(icon) })
 }
 
+const renderLabel = (label, key) => {
+  return () => h(RouterLink, { to: { name: key } }, { default: () => label })
+}
+
 const menuOptions = [
   {
-    label: 'Dashboard',
+    label: renderLabel('Dashboard', 'dashboard'),
     key: 'dashboard',
     icon: renderIcon(HomeFilled)
   },
   {
-    label: 'Buy Transaction',
-    key: 'buy-transaction',
+    label: renderLabel('Buy Transaction', 'buy'),
+    key: 'buy',
     icon: renderIcon(DownloadOutlined)
   },
   {
-    label: 'Sell Transaction',
-    key: 'sell-transaction',
+    label: renderLabel('Sell Transaction', 'sell'),
+    key: 'sell',
     icon: renderIcon(UploadOutlined)
   },
   {
-    label: 'Summary',
+    label: renderLabel('Summary', 'summary'),
     key: 'summary',
     icon: renderIcon(DisplaySettingsOutlined)
   }
@@ -57,6 +65,7 @@ const menuOptions = [
           class="h-[calc(100vh-56px)] bg-green-50"
         >
           <n-menu
+            v-model:value="activeKey"
             :inverted="inverted"
             :collapsed-width="64"
             :collapsed-icon-size="22"
