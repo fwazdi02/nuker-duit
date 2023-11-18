@@ -36,10 +36,20 @@ export const useAuthStore = defineStore('authStore', () => {
     Cookies.set(`${prefix}user`, JSON.stringify(val))
   }
 
-  function setAuth({ user, token }){
+  function setAuthLogin({ user, token }){
     setToken(token)
     setUser(user)
   }
+  
+  function setAuthLogout(){
+    token.value = ''
+    user.value = {
+      email: '',
+      name: ''
+    }
+    Cookies.remove(`${prefix}token`)
+    Cookies.remove(`${prefix}user`)
+  }
 
-  return { token, user, setToken, setUser, setAuth, isLoggedIn }
+  return { token, user, setToken, setUser, setAuthLogin, setAuthLogout, isLoggedIn }
 })

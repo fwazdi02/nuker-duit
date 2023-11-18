@@ -1,20 +1,27 @@
 <script setup>
-import { useRoute, RouterLink } from 'vue-router'
-import { h, ref } from 'vue'
+import { useRoute, RouterLink, useRouter } from 'vue-router'
+import { h, ref, watch } from 'vue'
 import { NIcon } from 'naive-ui'
+import { useAuthStore } from '@/stores/authStore'
+
 import {
   HomeFilled,
   DisplaySettingsOutlined,
   DownloadOutlined,
-  UploadOutlined
+  UploadOutlined,
+  LogOutFilled
 } from '@vicons/material'
 import { useMessage } from 'naive-ui'
 window.$message = useMessage()
 
-const inverted = ref(false)
 
+
+const authStore = useAuthStore()
 const route = useRoute()
+const router = useRouter()
+
 const activeKey = ref(route.name)
+const inverted = ref(false)
 
 function renderIcon(icon) {
   return () => h(NIcon, null, { default: () => h(icon) })
@@ -23,6 +30,18 @@ function renderIcon(icon) {
 const renderLabel = (label, key) => {
   return () => h(RouterLink, { to: { name: key } }, { default: () => label })
 }
+
+const handleLogout = () =>{
+  authStore.setAuthLogout()
+  window.$message.success('Logout success')
+  router.push({ name: 'login' })
+}
+
+watch(activeKey, () =>{
+  if(activeKey.value === 'logout'){
+    handleLogout()
+  }
+})
 
 const menuOptions = [
   {
@@ -44,6 +63,11 @@ const menuOptions = [
     label: renderLabel('Summary', 'summary'),
     key: 'summary',
     icon: renderIcon(DisplaySettingsOutlined)
+  },
+  {
+    label: 'Logout',
+    key: 'logout',
+    icon: renderIcon(LogOutFilled)
   }
 ]
 </script>

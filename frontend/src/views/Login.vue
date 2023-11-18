@@ -51,7 +51,7 @@ const handleSubmit = async () => {
   const response = await authLogin(model.value)
   if (response.data) {
     const { user, access_token }= response.data.data
-    authStore.setAuth({ user, token: access_token })
+    authStore.setAuthLogin({ user, token: access_token })
     window.$message.success(`Welcome back, ${user?.name}`)
     router.push({ name: 'dashboard' })
   }
