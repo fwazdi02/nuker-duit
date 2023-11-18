@@ -8,13 +8,11 @@ const model = ref({
   amount: 0,
   idr: 0
 })
-
-// const validatorInput = (x) => x > 0
 </script>
 
 <template>
   <div>
-    <n-card title="Transaction Buy" class="md:w-2/3">
+    <n-card title="Buy Transaction" class="md:w-2/3">
       <div class="flex flex-col gap-2">
         <div class="flex flex-col gap-1">
           <label>Currency</label>
@@ -22,11 +20,11 @@ const model = ref({
         </div>
         <div class="flex flex-col gap-1">
           <label>Amount</label>
-          <n-input v-model:value="model.amount" type="number" />
+          <n-input v-model="model.amount" type="number" />
         </div>
         <div class="flex flex-col gap-1">
           <label>Total IDR</label>
-          <n-input v-model:value="model.idr" type="number" disabled />
+          <n-input v-model="model.idr" type="number" disabled />
         </div>
       </div>
       <template #footer>
