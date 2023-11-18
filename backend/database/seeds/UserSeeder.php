@@ -12,7 +12,7 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        $user = ['Admin', 'admin@localhost.com', bcrypt('123456')];
+        $user = ['Farid Wazdi', 'admin@localhost.com', bcrypt('123456')];
         DB::insert('insert into users (name, email, password) values (?, ?, ?)', $user);
     }
 }
