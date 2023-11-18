@@ -49,8 +49,16 @@ const menuOptions = [
   <div class="h-screen">
     <n-layout>
       <n-layout-header :inverted="inverted" bordered class="h-[56px]">
-        <div class="flex items-center h-full px-4 text-green-600">
+        <div class="flex items-center justify-between h-full px-4 text-green-600">
           <p class="text-xl font-bold my-0">NukerDuit!</p>
+          <div class="flex items-center gap-4">
+            Admin
+            <n-avatar
+              round
+              size="medium"
+              src="https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg"
+            />
+          </div>
         </div>
       </n-layout-header>
       <n-layout has-sider>
