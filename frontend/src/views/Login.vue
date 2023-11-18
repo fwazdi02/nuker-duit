@@ -1,5 +1,5 @@
 <script setup></script>
 
 <template>
-  <RouterView />
+  <NButton type="primary">Login</NButton>
 </template>
