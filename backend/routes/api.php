@@ -35,7 +35,7 @@ Route::post('auth/login', function (Request $request) {
         ];
         return response()->json(['success'=> true, 'data' => $response], 200);
     }
-return response()->json(['error' => 'Wrong email or password, please try again'], 401);
+return response()->json([ 'success' => false, 'message' => 'Wrong email or password, please try again'], 400);
 });
 
 Route::middleware('auth:api')->group(function () {
