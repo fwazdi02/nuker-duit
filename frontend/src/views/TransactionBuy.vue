@@ -1,14 +1,16 @@
 <script setup>
-import { ref, reactive, computed } from 'vue'
+import { ref, reactive, computed, watch } from 'vue'
 import AjaxCurrency from '@/components/AjaxCurrency.vue'
 import { getExchangeRate } from '@/services';
+
+import debounce from 'lodash.debounce'
 
 const isLoading = ref(false)
 const model = reactive({
   code: '',
   amount: 0,
-  idr: '0'
 })
+const idr = ref('0')
 
 const fetchExchangeRate = async () => {
   const payload = {
@@ -19,13 +21,23 @@ const fetchExchangeRate = async () => {
   const response = await getExchangeRate(payload)
   if(response.data){
     const { data } = response.data
-    model.idr = (data.idr * model.amount).toFixed(2);
+    idr.value = (data.idr * model.amount).toFixed(2);
   }
 }
 
+const handleReset = () =>{
+  model.code = ''
+  model.amount = 0
+  idr.value = '0'
+}
+
 const resultRupiah = computed(() => {
-  return parseInt(model.idr).toLocaleString("id-ID", { style: "currency", currency: "IDR"})
+  return parseInt(idr.value).toLocaleString("id-ID", { style: "currency", currency: "IDR"})
 })
+
+watch(model, debounce(() => {
+  if(!!model.code && !!model.amount) fetchExchangeRate()
+}, 500))
 
 
 </script>
@@ -49,7 +61,7 @@ const resultRupiah = computed(() => {
       </div>
       <template #footer>
         <div class="flex justify-end gap-2">
-          <n-button type="default" @click="fetchExchangeRate">Reset</n-button>
+          <n-button type="default" @click="handleReset">Reset</n-button>
           <n-button type="primary" :loading="isLoading">Submit</n-button>
         </div>
       </template>
