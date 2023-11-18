@@ -64,8 +64,8 @@ class TransactionController extends Controller
             // save transanction to db
             $currency = DB::select('select id from currencies where code = ?', [$code])[0];
             $user_id = $request->user()->id;
-            DB::insert('insert into transactions (currency_id, type, amount, rate, amount_result, created_by) values (?, ?, ?, ?, ?, ?)', 
-            [$currency->id, $transaction_type, $amount, $rate, $result, $user_id]);
+        DB::insert('insert into transactions (currency_id, type, amount, rate, amount_result, created_by, created_at) values (?, ?, ?, ?, ?, ?, ?)', 
+            [$currency->id, $transaction_type, $amount, $rate, $result, $user_id, date('Y-m-d H:i:s')]);
 
             return response()->json([
                 'success' => true, 
