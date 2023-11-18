@@ -48,6 +48,7 @@ Route::middleware('auth:api')->group(function () {
     Route::get('currencies', [CurrencyController::class, 'index']);
     Route::post('rate', [TransactionController::class, 'getRate']);
     Route::post('exchange', [TransactionController::class, 'exchange']);
+    Route::get('recent-transaction', [TransactionController::class, 'recentTransactions']);
 });
 
 

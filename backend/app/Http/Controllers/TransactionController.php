@@ -74,4 +74,18 @@ class TransactionController extends Controller
         }
         return response()->json(['success' => false, 'message' => "Something went wrong, please try again"], 200);
     }
+
+
+    public function recentTransactions(){
+        $user_id = auth()->user()->id;
+        $transactions = DB::select("select distinct c.code, c.name, t.rate, t.created_at 
+        from transactions as t 
+        join currencies as c on t.currency_id = c.id 
+        where t.created_by = ? 
+        and t.created_at is not null
+        and t.created_at < now() - interval '5 minutes'
+        order by t.created_at desc 
+        limit 4", [$user_id]);
+        return response()->json(['success' => true, 'data' => $transactions], 200);
+    }
 }
