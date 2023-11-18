@@ -1,4 +1,5 @@
 <script setup>
+import { authLogin } from '@/services'
 import { useMessage } from 'naive-ui'
 window.$message = useMessage()
 
@@ -8,6 +9,12 @@ const model = ref({
   email: null,
   password: null
 })
+const isValidEmail = (value) => {
+  return value.match(
+            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+          )
+}
+
 const rules = {
   email: [
     {
@@ -15,10 +22,7 @@ const rules = {
       validator(rules, value) {
         if (!value) return new Error('Email is required')
         const status =
-          value &&
-          value.match(
-            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-          )
+          value && isValidEmail(value)
         if (!status) {
           return new Error('Email is invalid')
         }
@@ -34,6 +38,18 @@ const rules = {
       trigger: ['input', 'blur']
     }
   ]
+}
+
+const handleSubmit = () => {
+  isLoading.value = true
+  const response = authLogin(model.value)
+  if (response.data?.success) {
+    const user = response.data.data
+    window.$message.success(`Welcome back, ${user?.name}`)
+  }
+  setTimeout(() => {
+    isLoading.value = false
+  }, 300);
 }
 </script>
 
@@ -55,8 +71,9 @@ const rules = {
               <n-button type="default"> Reset </n-button>
               <n-button
                 :loading="isLoading"
-                :disabled="!model.email && !model.password"
+                :disabled="!model.email || !model.password || !isValidEmail(model.email)"
                 type="primary"
+                @click="handleSubmit"
               >
                 Login
               </n-button>
