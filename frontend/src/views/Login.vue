@@ -1,4 +1,7 @@
 <script setup>
+import { useMessage } from 'naive-ui'
+window.$message = useMessage()
+
 import { ref } from 'vue'
 const isLoading = ref(false)
 const model = ref({
