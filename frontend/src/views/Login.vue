@@ -7,7 +7,6 @@ import { ref } from 'vue'
 window.$message = useMessage()
 
 
-
 const router = useRouter()
 const isLoading = ref(false)
 const authStore = useAuthStore()

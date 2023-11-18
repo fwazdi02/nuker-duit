@@ -20,7 +20,6 @@ export const useAuthStore = defineStore('authStore', () => {
 
   if(_user){
     const parsedUser = JSON.parse(_user)
-    console.log(parsedUser)
     setUser(parsedUser)
   }
 
@@ -34,7 +33,7 @@ export const useAuthStore = defineStore('authStore', () => {
 
   function setUser(val) {
     user.value = val
-    Cookies.set(`${prefix}user`, val)
+    Cookies.set(`${prefix}user`, JSON.stringify(val))
   }
 
   function setAuth({ user, token }){

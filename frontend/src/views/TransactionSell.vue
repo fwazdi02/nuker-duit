@@ -4,7 +4,7 @@ import AjaxCurrency from '../components/AjaxCurrency.vue'
 
 const isLoading = ref(false)
 const model = ref({
-  currency_code: 'jpy',
+  currency_code: '',
   amount: 0,
   idr: 0
 })
