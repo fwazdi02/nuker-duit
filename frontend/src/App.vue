@@ -1,5 +1,16 @@
-<script setup></script>
+<script setup>
+const themeOverrides = {
+  common: {
+    borderRadius: '6px',
+    borderRadiusSmall: '3px'
+  }
+}
+</script>
 
 <template>
-  <RouterView />
+  <NConfigProvider :theme-overrides="themeOverrides">
+    <NMessageProvider>
+      <RouterView />
+    </NMessageProvider>
+  </NConfigProvider>
 </template>
