@@ -1,9 +1,9 @@
 <script setup>
 import { authLogin } from '@/services'
 import { useAuthStore } from '@/stores/authStore'
-import { useMessage } from 'naive-ui'
 import { useRouter } from 'vue-router'
 import { ref } from 'vue'
+import { useMessage } from 'naive-ui'
 window.$message = useMessage()
 
 

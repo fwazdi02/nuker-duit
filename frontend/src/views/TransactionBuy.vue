@@ -1,7 +1,7 @@
 <script setup>
 import { ref, reactive, computed, watch } from 'vue'
 import AjaxCurrency from '@/components/AjaxCurrency.vue'
-import { getExchangeRate } from '@/services';
+import { getExchangeRate, submitExchange } from '@/services';
 
 import debounce from 'lodash.debounce'
 
@@ -23,6 +23,23 @@ const fetchExchangeRate = async () => {
     const { data } = response.data
     idr.value = (data.idr * model.amount).toFixed(2);
   }
+}
+
+const fetchSubmitExchange = async () =>{
+  isLoading.value = true
+  const payload = {
+    code: model.code,
+    amount: model.amount,
+    type: 'buy'
+  }
+  const response = await submitExchange(payload)
+  if(response.data){
+    window.$message.success(response.data.message)
+    handleReset()
+  }
+  setTimeout(() => {
+    isLoading.value = false
+  }, 500)
 }
 
 const handleReset = () =>{
@@ -62,7 +79,7 @@ watch(model, debounce(() => {
       <template #footer>
         <div class="flex justify-end gap-2">
           <n-button type="default" @click="handleReset">Reset</n-button>
-          <n-button type="primary" :loading="isLoading">Submit</n-button>
+      <n-button type="primary" :loading="isLoading" @click="fetchSubmitExchange">Submit</n-button>
         </div>
       </template>
     </n-card>

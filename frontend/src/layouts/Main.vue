@@ -1,5 +1,4 @@
 <script setup>
-const inverted = ref(false)
 import { useRoute, RouterLink } from 'vue-router'
 import { h, ref } from 'vue'
 import { NIcon } from 'naive-ui'
@@ -9,6 +8,10 @@ import {
   DownloadOutlined,
   UploadOutlined
 } from '@vicons/material'
+import { useMessage } from 'naive-ui'
+window.$message = useMessage()
+
+const inverted = ref(false)
 
 const route = useRoute()
 const activeKey = ref(route.name)
