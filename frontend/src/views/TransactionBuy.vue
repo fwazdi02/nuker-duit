@@ -1,31 +1,10 @@
 <script setup>
 import { ref } from 'vue'
-const options = ref([
-  {
-    label: 'Drive My Car',
-    value: 'song1'
-  },
-  {
-    label: 'Norwegian Wood',
-    value: 'song2'
-  },
-  {
-    label: "You Won't See",
-    value: 'song3'
-  },
-  {
-    label: 'Nowhere Man',
-    value: 'song4'
-  },
-  {
-    label: 'Think For Yourseld',
-    value: 'song5'
-  }
-])
+import AjaxCurrency from '../components/AjaxCurrency.vue'
 
 const isLoading = ref(false)
 const model = ref({
-  currency_id: null,
+  currency_code: 'jpy',
   amount: 0,
   idr: 0
 })
@@ -39,11 +18,7 @@ const model = ref({
       <div class="flex flex-col gap-2">
         <div class="flex flex-col gap-1">
           <label>Currency</label>
-          <n-select
-            v-model:value="model.currency_id"
-            :options="options"
-            :reset-menu-on-options-change="false"
-          />
+          <AjaxCurrency v-model="model.currency_code"></AjaxCurrency>
         </div>
         <div class="flex flex-col gap-1">
           <label>Amount</label>
