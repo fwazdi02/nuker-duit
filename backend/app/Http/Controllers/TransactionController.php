@@ -115,8 +115,28 @@ class TransactionController extends Controller
 
 
     public function summaries(Request $request){
-        $range = $request->input('range', null);
+        $range = $request->input('data_in', 'daily');
+
+        $validator = Validator::make($request->all(), [
+            'data_in' => 'in:daily,weekly,monthly',
+        ]);
+
+        if ($validator->fails()) {
+            $response = [
+                'success' => false,
+                'message' => implode(",", $validator->messages()->all()),
+            ];
+            return response()->json($response, 400);
+        }
         $user_id = auth()->user()->id;
+
+        $interval = '1 day';
+        if($range == 'weekly'){
+            $interval = '1 week';
+        }else if($range == 'monthly'){
+            $interval = '1 month';
+        }
+
         $data_summaries = DB::select("
         select s1.code, s1.name,
         s1.total_buy,
@@ -131,12 +151,13 @@ class TransactionController extends Controller
             select 
             c.code,
             c.name,
-            (select coalesce(sum(t.amount), 0) from public.transactions as t where t.type = 'buy' and t.currency_id = c.id) as total_buy,
-            (select coalesce(sum(t.amount), 0) from public.transactions as t where t.type = 'sell' and t.currency_id = c.id) as total_sell,
+            (select coalesce(sum(t.amount), 0) from public.transactions as t where t.type = 'buy' and t.currency_id = c.id and t.created_at > now() - interval '".$interval."') as total_buy,
+            (select coalesce(sum(t.amount), 0) from public.transactions as t where t.type = 'sell' and t.currency_id = c.id and t.created_at > now() - interval '".$interval."') as total_sell,
             (select 
                 t.amount_stock 
                 from public.transactions as t 
                 where t.currency_id = c.id 
+                and t.created_at > now() - interval '".$interval."'
                 order by t.created_at desc limit 1) as last_saldo
             from public.currencies as c
         ) as s1
