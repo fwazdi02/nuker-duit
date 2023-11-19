@@ -38,6 +38,7 @@ onMounted(async () => {
 <template>
   <n-select
     :loading="isLoading"
+    :disabled="isLoading"
     v-model:value="selectedValue"
     :options="options"
     placeholder="Select currency"
