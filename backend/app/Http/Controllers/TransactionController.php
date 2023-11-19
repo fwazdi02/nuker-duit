@@ -26,7 +26,7 @@ class TransactionController extends Controller
             return response()->json($response, 400);
         }
 
-        $data = MoneyChanger::getExchangeRate($code, $transaction_type);
+        $data = MoneyChanger::getExchangeRate($code);
         return response()->json($data, $data['success'] === true ? 200 : 400);
     }
     
@@ -50,9 +50,9 @@ class TransactionController extends Controller
         }
         
 
-        $data = MoneyChanger::getExchangeRate($code, $transaction_type);
+        $data = MoneyChanger::getExchangeRate($code);
         if($data['success'] === true){
-            $rate = $data['data'][$transaction_type === 'buy' ? 'idr' : $code];
+            $rate = $data['data']['idr'];
             $result = round($rate * $amount, 2);
             $message = '';
             if($transaction_type == 'buy'){
@@ -62,16 +62,40 @@ class TransactionController extends Controller
             }
 
             // save transanction to db
-            $currency = DB::select('select id from currencies where code = ?', [$code])[0];
+            $currency = DB::select('select * from currencies where code = ?', [$code])[0];
             $user_id = $request->user()->id;
-        DB::insert('insert into transactions (currency_id, type, amount, rate, amount_result, created_by, created_at) values (?, ?, ?, ?, ?, ?, ?)', 
-            [$currency->id, $transaction_type, $amount, $rate, $result, $user_id, date('Y-m-d H:i:s')]);
+            $stock_amount = $currency->available_amount;
+
+            if($transaction_type == 'buy'){
+                $new_amount = (double)$stock_amount + (double)$amount;
+            }else{
+                $new_amount = (double)$stock_amount - (double)$amount;
+            }
+            
+            // check is stock positive 
+            if($new_amount < 0){
+                return response()->json(['success' => false, 'message' => "Insufficient stock"], 400);
+            }
+
+            try {
+                DB::beginTransaction();
+                DB::update('update currencies set available_amount = ?, updated_at = ? where code = ?', [$new_amount, date('Y-m-d H:i:s') , $code]);
+                DB::insert('insert into transactions (currency_id, type, amount, rate, amount_result, amount_stock, created_by, created_at) values (?, ?, ?, ?, ?, ?, ?, ?)', 
+                [$currency->id, $transaction_type, $amount, $rate, $result, $new_amount, $user_id, date('Y-m-d H:i:s')]);
+            }
+            catch(Exception $e){
+                DB::rollBack();
+                return response()->json(['success' => false, 'message' => "Something went wrong, please try again"], 200);
+            }
+
+            DB::commit();
 
             return response()->json([
                 'success' => true, 
                 'message' => $message,
             ], 200);
         }
+
         return response()->json(['success' => false, 'message' => "Something went wrong, please try again"], 200);
     }
 
@@ -83,9 +107,41 @@ class TransactionController extends Controller
         join currencies as c on t.currency_id = c.id 
         where t.created_by = ? 
         and t.created_at is not null
-        and t.created_at < now() - interval '5 minutes'
+        and t.created_at > now() - interval '5 minutes'
         order by t.created_at desc 
         limit 4", [$user_id]);
         return response()->json(['success' => true, 'data' => $transactions], 200);
     }
+
+
+    public function summaries(Request $request){
+        $range = $request->input('range', null);
+        $user_id = auth()->user()->id;
+        $data_summaries = DB::select("
+        select s1.code, s1.name,
+        s1.total_buy,
+        s1.total_sell,
+        case
+            when s1.last_saldo is null then 
+                (select c1.available_amount from currencies as c1 where c1.code = s1.code) 
+            else
+                s1.last_saldo
+            end as saldo
+        from (
+            select 
+            c.code,
+            c.name,
+            (select coalesce(sum(t.amount), 0) from public.transactions as t where t.type = 'buy' and t.currency_id = c.id) as total_buy,
+            (select coalesce(sum(t.amount), 0) from public.transactions as t where t.type = 'sell' and t.currency_id = c.id) as total_sell,
+            (select 
+                t.amount_stock 
+                from public.transactions as t 
+                where t.currency_id = c.id 
+                order by t.created_at desc limit 1) as last_saldo
+            from public.currencies as c
+        ) as s1
+        ");
+        return response()->json(['success' => true, 'data' => $data_summaries], 200);
+    }
+
 }

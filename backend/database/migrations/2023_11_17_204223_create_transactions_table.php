@@ -20,6 +20,7 @@ class CreateTransactionsTable extends Migration
             $table->double('amount')->unsigned();
             $table->double('rate')->unsigned();
             $table->double('amount_result')->unsigned();
+            $table->double('amount_stock')->unsigned()->default(0);
             $table->unsignedBigInteger('created_by');
             $table->timestamps();
 

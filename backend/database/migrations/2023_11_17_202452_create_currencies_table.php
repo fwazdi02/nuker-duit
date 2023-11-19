@@ -17,6 +17,7 @@ class CreateCurrenciesTable extends Migration
             $table->id();
             $table->string('code', 7);
             $table->string('name');
+            $table->double('available_amount')->unsigned()->default(0);
             $table->timestamps();
         });
     }
