@@ -54,7 +54,7 @@ const submitExchange = async (payload) => {
   }
 }
 
-const getSummaries = async (query='') => {
+const getSummaries = async (query = '') => {
   try {
     const response = await http.get(`/summaries/${query}`)
     return response
@@ -65,5 +65,11 @@ const getSummaries = async (query='') => {
   }
 }
 
-
-export { authLogin, getCurrencies, getExchangeRate, getRecentTransaction, getSummaries, submitExchange }
+export {
+  authLogin,
+  getCurrencies,
+  getExchangeRate,
+  getRecentTransaction,
+  getSummaries,
+  submitExchange
+}

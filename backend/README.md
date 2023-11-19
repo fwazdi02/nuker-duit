@@ -7,26 +7,20 @@
 
 3. php artisan key:generate
 
-4. adjust absolute path of DB_DATABASE=your_absolute_path\database\database.sqlite in .env
-
-5. database.sql comited with data so you can just run : php artisan serve
-
-
 ### Migrate Database
 
 php artisan migrate
-
-
-### Seed Database
-
-php artisan db:seed
-
 
 ### Passport Install
 
 php artisan passport:install
 
+### Seed Database
 
+php artisan db:seed
+
+### Start Server
+php artisan serve
 
 
 ### Create New User

@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-import { getSummaries } from '@/services';
+import { getSummaries } from '@/services'
 
 const isLoading = ref(false)
 const summaries = ref([])
@@ -8,7 +8,7 @@ const summaries = ref([])
 const fetchSummaries = async () => {
   isLoading.value = true
   const response = await getSummaries()
-  if(response.data){
+  if (response.data) {
     summaries.value = response.data.data
   }
   setTimeout(() => {
@@ -19,8 +19,6 @@ const fetchSummaries = async () => {
 onMounted(() => {
   fetchSummaries()
 })
-
-
 </script>
 
 <template>
@@ -39,14 +37,14 @@ onMounted(() => {
           <tbody>
             <tr v-for="(item, index) in summaries" :key="index">
               <td class="uppercase">{{ item.code }}</td>
-              <td> {{  item.total_buy  }}</td>
-              <td> {{  item.total_sell  }}</td>
-              <td>{{  item.saldo  }}</td>
+              <td>{{ item.total_buy }}</td>
+              <td>{{ item.total_sell }}</td>
+              <td>{{ item.saldo }}</td>
             </tr>
           </tbody>
         </n-table>
       </n-spin>
-      </n-card>
+    </n-card>
   </div>
 </template>
 

@@ -1,5 +1,5 @@
 <script setup>
-import { getCurrencies } from '@/services';
+import { getCurrencies } from '@/services'
 import { ref, watch, onMounted } from 'vue'
 const props = defineProps(['modelValue'])
 const emit = defineEmits(['update:modelValue'])
@@ -7,14 +7,15 @@ const selectedValue = ref('')
 const options = ref([])
 const isLoading = ref(false)
 
-
 const fetchCurrencies = async () => {
   isLoading.value = true
-  const response = await getCurrencies().finally(() =>{
+  const response = await getCurrencies().finally(() => {
     isLoading.value = false
   })
-  if(response.data){
-    options.value = response.data.data.map(item => { return { label: `${item.code.toUpperCase()} - ${item.name}`, value: item.code } })
+  if (response.data) {
+    options.value = response.data.data.map((item) => {
+      return { label: `${item.code.toUpperCase()} - ${item.name}`, value: item.code }
+    })
   }
 }
 
@@ -28,7 +29,7 @@ watch(selectedValue, () => {
 
 onMounted(async () => {
   await fetchCurrencies()
-  if(props.modelValue){
+  if (props.modelValue) {
     selectedValue.value = props.modelValue
   }
   options.value.unshift({ label: 'Select Currency', value: '' })

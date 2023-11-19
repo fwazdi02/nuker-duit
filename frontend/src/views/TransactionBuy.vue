@@ -1,14 +1,14 @@
 <script setup>
 import { ref, reactive, computed, watch } from 'vue'
 import AjaxCurrency from '@/components/AjaxCurrency.vue'
-import { getExchangeRate, submitExchange } from '@/services';
+import { getExchangeRate, submitExchange } from '@/services'
 
 import debounce from 'lodash.debounce'
 
 const isLoading = ref(false)
 const model = reactive({
   code: '',
-  amount: 0,
+  amount: 0
 })
 const idr = ref('0')
 
@@ -19,13 +19,13 @@ const fetchExchangeRate = async () => {
     type: 'buy'
   }
   const response = await getExchangeRate(payload)
-  if(response.data){
+  if (response.data) {
     const { data } = response.data
-    idr.value = (data.idr * model.amount).toFixed(2);
+    idr.value = (data.idr * model.amount).toFixed(2)
   }
 }
 
-const fetchSubmitExchange = async () =>{
+const fetchSubmitExchange = async () => {
   isLoading.value = true
   const payload = {
     code: model.code,
@@ -33,7 +33,7 @@ const fetchSubmitExchange = async () =>{
     type: 'buy'
   }
   const response = await submitExchange(payload)
-  if(response.data){
+  if (response.data) {
     window.$message.success(response.data.message)
     handleReset()
   }
@@ -42,21 +42,22 @@ const fetchSubmitExchange = async () =>{
   }, 500)
 }
 
-const handleReset = () =>{
+const handleReset = () => {
   model.code = ''
   model.amount = 0
   idr.value = '0'
 }
 
 const resultRupiah = computed(() => {
-  return parseInt(idr.value).toLocaleString("id-ID", { style: "currency", currency: "IDR"})
+  return parseInt(idr.value).toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })
 })
 
-watch(model, debounce(() => {
-  if(!!model.code && !!model.amount) fetchExchangeRate()
-}, 500))
-
-
+watch(
+  model,
+  debounce(() => {
+    if (!!model.code && !!model.amount) fetchExchangeRate()
+  }, 500)
+)
 </script>
 
 <template>
@@ -79,8 +80,13 @@ watch(model, debounce(() => {
       <template #footer>
         <div class="flex justify-end gap-2">
           <n-button type="default" @click="handleReset">Reset</n-button>
-          <n-button type="primary" :loading="isLoading" 
-          @click="fetchSubmitExchange" :disabled="!!!model.code || !!!model.amount">Submit</n-button>
+          <n-button
+            type="primary"
+            :loading="isLoading"
+            @click="fetchSubmitExchange"
+            :disabled="!!!model.code || !!!model.amount"
+            >Submit</n-button
+          >
         </div>
       </template>
     </n-card>

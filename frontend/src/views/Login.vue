@@ -6,7 +6,6 @@ import { ref } from 'vue'
 import { useMessage } from 'naive-ui'
 window.$message = useMessage()
 
-
 const router = useRouter()
 const isLoading = ref(false)
 const authStore = useAuthStore()
@@ -17,8 +16,8 @@ const model = ref({
 })
 const isValidEmail = (value) => {
   return value.match(
-            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-          )
+    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+  )
 }
 
 const rules = {
@@ -27,8 +26,7 @@ const rules = {
       required: true,
       validator(rules, value) {
         if (!value) return new Error('Email is required')
-        const status =
-          value && isValidEmail(value)
+        const status = value && isValidEmail(value)
         if (!status) {
           return new Error('Email is invalid')
         }
@@ -50,14 +48,14 @@ const handleSubmit = async () => {
   isLoading.value = true
   const response = await authLogin(model.value)
   if (response.data) {
-    const { user, access_token }= response.data.data
+    const { user, access_token } = response.data.data
     authStore.setAuthLogin({ user, token: access_token })
     window.$message.success(`Welcome back, ${user?.name}`)
     router.push({ name: 'dashboard' })
   }
   setTimeout(() => {
     isLoading.value = false
-  }, 1000);
+  }, 1000)
 }
 </script>
 

@@ -14,8 +14,6 @@ import {
 import { useMessage } from 'naive-ui'
 window.$message = useMessage()
 
-
-
 const authStore = useAuthStore()
 const route = useRoute()
 const router = useRouter()
@@ -31,14 +29,14 @@ const renderLabel = (label, key) => {
   return () => h(RouterLink, { to: { name: key } }, { default: () => label })
 }
 
-const handleLogout = () =>{
+const handleLogout = () => {
   authStore.setAuthLogout()
   window.$message.success('Logout success')
   router.push({ name: 'login' })
 }
 
-watch(activeKey, () =>{
-  if(activeKey.value === 'logout'){
+watch(activeKey, () => {
+  if (activeKey.value === 'logout') {
     handleLogout()
   }
 })
@@ -79,7 +77,7 @@ const menuOptions = [
         <div class="flex items-center justify-between h-full px-4 text-green-600">
           <p class="text-xl font-bold my-0">NukerDuit!</p>
           <div class="flex items-center gap-4">
-            {{  authStore?.user?.name || '-' }} 
+            {{ authStore?.user?.name || '-' }}
             <n-avatar
               round
               size="medium"

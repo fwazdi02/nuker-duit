@@ -4,7 +4,6 @@ import Cookies from 'js-cookie'
 
 const prefix = import.meta.env.VITE_PREFIX_TOKEN
 
-
 export const useAuthStore = defineStore('authStore', () => {
   const _user = Cookies.get(`${prefix}user`)
   const _token = Cookies.get(`${prefix}token`)
@@ -14,16 +13,15 @@ export const useAuthStore = defineStore('authStore', () => {
     name: ''
   })
 
-  if(_token){
+  if (_token) {
     setToken(_token)
   }
 
-  if(_user){
+  if (_user) {
     const parsedUser = JSON.parse(_user)
     setUser(parsedUser)
   }
 
-  
   const isLoggedIn = computed(() => !!user.value.email && !!token.value)
 
   function setToken(val) {
@@ -36,12 +34,12 @@ export const useAuthStore = defineStore('authStore', () => {
     Cookies.set(`${prefix}user`, JSON.stringify(val))
   }
 
-  function setAuthLogin({ user, token }){
+  function setAuthLogin({ user, token }) {
     setToken(token)
     setUser(user)
   }
-  
-  function setAuthLogout(){
+
+  function setAuthLogout() {
     token.value = ''
     user.value = {
       email: '',
