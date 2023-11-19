@@ -1,6 +1,12 @@
 # nuker-duit monorepo
 
+-----------------------------------------------------------------------
 
+### Akun Demo :
+email : admin@localhost.com
+password : 123456  
+
+-----------------------------------------------------------------------
 # Setup Project Backend (PHP 7.4.30)
 
 1. composer install
