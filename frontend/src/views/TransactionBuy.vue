@@ -79,7 +79,8 @@ watch(model, debounce(() => {
       <template #footer>
         <div class="flex justify-end gap-2">
           <n-button type="default" @click="handleReset">Reset</n-button>
-      <n-button type="primary" :loading="isLoading" @click="fetchSubmitExchange">Submit</n-button>
+          <n-button type="primary" :loading="isLoading" 
+          @click="fetchSubmitExchange" :disabled="!!!model.code || !!!model.amount">Submit</n-button>
         </div>
       </template>
     </n-card>

@@ -21,7 +21,6 @@ const fetchExchangeRate = async () => {
   const response = await getExchangeRate(payload)
   if(response.data){
     const { data } = response.data
-    console.log(data[model.code])
     idr.value = (data.idr * model.amount).toFixed(2);
   }
 }
@@ -80,7 +79,7 @@ watch(model, debounce(() => {
       <template #footer>
         <div class="flex justify-end gap-2">
           <n-button type="default" @click="handleReset">Reset</n-button>
-      <n-button type="primary" :loading="isLoading" @click="fetchSubmitExchange">Submit</n-button>
+      <n-button type="primary" :loading="isLoading" @click="fetchSubmitExchange" :disabled="!!!model.code || !!!model.amount">Submit</n-button>
         </div>
       </template>
     </n-card>

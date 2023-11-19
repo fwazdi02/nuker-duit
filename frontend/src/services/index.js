@@ -54,5 +54,16 @@ const submitExchange = async (payload) => {
   }
 }
 
+const getSummaries = async (query='') => {
+  try {
+    const response = await http.get(`/summaries/${query}`)
+    return response
+  } catch (error) {
+    const message = error.response?.data?.message || error.message
+    console.log(message)
+    window.$message.error(message)
+  }
+}
 
-export { authLogin, getCurrencies, getExchangeRate, getRecentTransaction, submitExchange }
+
+export { authLogin, getCurrencies, getExchangeRate, getRecentTransaction, getSummaries, submitExchange }
