@@ -5,9 +5,14 @@ const props = defineProps(['modelValue'])
 const emit = defineEmits(['update:modelValue'])
 const selectedValue = ref('')
 const options = ref([])
+const isLoading = ref(false)
+
 
 const fetchCurrencies = async () => {
-  const response = await getCurrencies()
+  isLoading.value = true
+  const response = await getCurrencies().finally(() =>{
+    isLoading.value = false
+  })
   if(response.data){
     options.value = response.data.data.map(item => { return { label: `${item.code.toUpperCase()} - ${item.name}`, value: item.code } })
   }
@@ -31,6 +36,7 @@ onMounted(async () => {
 </script>
 <template>
   <n-select
+    :loading="isLoading"
     v-model:value="selectedValue"
     :options="options"
     placeholder="Select currency"
