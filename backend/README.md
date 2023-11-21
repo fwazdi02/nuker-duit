@@ -24,7 +24,7 @@ php artisan serve
 
 
 ### Create New User
-you can create new user via : http://localhost:8000/register
+you can create new user via : http://localhost:9999/register
 
 
 

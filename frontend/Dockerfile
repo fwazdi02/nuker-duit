@@ -3,33 +3,22 @@
 # Use the official Node 18.16.1 image as the base image
 FROM node:18.17
 
-# Set working directory inside the container
-WORKDIR /usr/src/app
+WORKDIR /app
 
-# Copy package.json and package-lock.json to install dependencies
+# Copy package.json and package-lock.json to the container
 COPY ./frontend/package*.json ./
 
-RUN npm config set fetch-retry-mintimeout 20000
-RUN npm config set fetch-retry-maxtimeout 120000
-RUN npm config rm proxy
-RUN npm config rm https-proxy
+# Install project dependencies
+RUN npm install serve -g
+RUN npm install
 
-
-RUN node --version
-RUN npm --version
-
-# Install dependencies
-RUN npm ci
-RUN npm run build
-
-# Copy the rest of the application code
+# Copy the rest of the application code to the container
 COPY ./frontend .
 
-# Build the Vue.js app
-
-# Expose port 8888 for the Vue.js app
-EXPOSE 8888
-
+# Build the Vue.js application with Vite
+RUN npm run build
 
 # Start the Vue.js app
-CMD ["npm", "run", "preview"]
+
+CMD ["npm", "run", "serve"]
+EXPOSE 8888
