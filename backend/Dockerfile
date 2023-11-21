@@ -34,6 +34,6 @@ RUN mkdir -p storage bootstrap/cache
 # Set permissions
 RUN chown -R www-data:www-data storage bootstrap/cache
 
-# Expose port 9000 and start PHP-FPM
-EXPOSE 9000
-CMD ["php-fpm"]
+# # Expose port 9999 and start PHP-FPM
+# EXPOSE 9000
+# CMD ["php-fpm"]

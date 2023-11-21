@@ -25,7 +25,7 @@ class CurrencySeeder extends Seeder
         ];
         
         foreach ($currencies as $currency) {
-            DB::insert('insert into currencies (code, name, available_amount, created_at) values (?, ?, ?, ?)', [
+            DB::insert('insert into public.currencies (code, name, available_amount, created_at) values (?, ?, ?, ?)', [
                 $currency[0],
                 $currency[1],
                 $currency[2],

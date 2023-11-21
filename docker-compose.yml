@@ -1,17 +1,63 @@
+version: '3.8'
+
 services:
+  db:
+      image: postgres:latest
+      container_name: postgres-db
+      environment:
+        POSTGRES_DB: laravel
+        POSTGRES_USER: postgres
+        POSTGRES_PASSWORD: root
+      ports:
+        - "5432:5432"
+
   backend:
     build:
       context: .
       dockerfile: ./backend/Dockerfile
+    container_name: laravel-app
+    image: laravel-app
+    environment:
+      - APP_ENV=local
+      - DB_CONNECTION=pgsql
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_DATABASE=laravel
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=root
     ports:
-      - 9000:9000
+      - 9999:9999
     volumes:
       - ./backend:/var/www/html
+    depends_on:
+      - migration
+    # command: >      
+    #   bash -c "./wait-for-it.sh db:5432 -- php artisan migrate
+    #   && php artisan db:seed
+    #   && php artisan serve --host=0.0.0.0 --port=9999"
+    command:
+      - /bin/bash
+      - -c
+      - |
+        php artisan migrate
+        php artisan migrate:refresh
+        php artisan db:seed
+        php artisan passport:install
+        php artisan serve --host=0.0.0.0 --port=9999
+
+    #   double migrate command just to make sure it run without error duplicate seed 
+
+  migration:
+    image: laravel-app
+    command: bash -c "./wait-for-it.sh db:5432"
+    depends_on:
+      - db
 
   frontend:
     build:
       context: .
       dockerfile: ./frontend/Dockerfile
+    container_name: vue-app
     ports:
       - 8888:8888
     volumes:
